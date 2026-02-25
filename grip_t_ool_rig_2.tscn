@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cb6kel1qml5op"]
+
+[ext_resource type="PackedScene" uid="uid://8v5sjhcylint" path="res://GripTOolRig2.glb" id="1_cprnj"]
+[ext_resource type="Script" uid="uid://irsbfwnj6ee8" path="res://ToolController.gd" id="2_vvs66"]
+
+[node name="GripTOolRig2" unique_id=355066744 node_paths=PackedStringArray("camera", "skeleton", "ik_target", "grab_point") instance=ExtResource("1_cprnj")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+script = ExtResource("2_vvs66")
+camera = NodePath("Camera3D")
+skeleton = NodePath("Armature/Skeleton3D")
+ik_target = NodePath("IK_Target")
+grab_point = NodePath("Armature/Skeleton3D/Bone_002/GrabPoint")
+
+[node name="GrabPoint" type="Marker3D" parent="Armature/Skeleton3D/Bone_002" parent_id_path=PackedInt32Array(983025874) index="1" unique_id=938383470]
+
+[node name="SkeletonIK3D" type="SkeletonIK3D" parent="Armature/Skeleton3D" parent_id_path=PackedInt32Array(1277113860) index="4" unique_id=1987525999]
+root_bone = &"Bone"
+tip_bone = &"Bone.002"
+target_node = NodePath("../../../IK_Target")
+
+[node name="IK_Target" type="Marker3D" parent="." index="1" unique_id=1282784462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.0296545e-08, 0.51643604, -2.2574136e-08)
+
+[node name="Camera3D" type="Camera3D" parent="." index="2" unique_id=1885748753]
+transform = Transform3D(1, 0, 0, 0, 0.21432617, -0.9767621, 0, 0.9767621, 0.21432617, 9.4613995e-08, 0.38719666, 0.0671982)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="3" unique_id=721286464]
+layers = 4

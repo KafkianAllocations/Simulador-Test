@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://ct580fp5pjj8r"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_d0bvi"]
+rough = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d0bvi"]
+radius = 0.005
+height = 0.08
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d0bvi"]
+albedo_color = Color(0.3317489, 0.3676168, 0.40644547, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_d0bvi"]
+material = SubResource("StandardMaterial3D_d0bvi")
+radius = 0.005
+height = 0.1
+radial_segments = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_snm2u"]
+albedo_color = Color(0.1764706, 0.5647059, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sh5ts"]
+material = SubResource("StandardMaterial3D_snm2u")
+top_radius = 0.002
+bottom_radius = 0.002
+height = 0.04
+
+[node name="AgujaQuirurgica" type="RigidBody3D" unique_id=1381409864]
+collision_layer = 3
+collision_mask = 3
+mass = 0.1
+physics_material_override = SubResource("PhysicsMaterial_d0bvi")
+continuous_cd = true
+angular_damp = 5.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=658310154]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_d0bvi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=682206933]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_d0bvi")
+
+[node name="Eslabon1" type="RigidBody3D" parent="." unique_id=1734071936]
+transform = Transform3D(-0.0040490944, 0.9999916, 0, -0.9999916, -0.0040490944, 0, 0, 0, 1, -0.07290551, -0.0004120171, -0.0010823235)
+collision_layer = 0
+collision_mask = 0
+mass = 0.02
+gravity_scale = 5.0
+can_sleep = false
+linear_damp = 0.5
+angular_damp = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Eslabon1" unique_id=404117370]
+mesh = SubResource("CylinderMesh_sh5ts")
+
+[node name="PinJoint3D" type="PinJoint3D" parent="." unique_id=125688108]
+transform = Transform3D(-0.0040490944, 0.9999916, 0, -0.9999916, -0.0040490944, 0, 0, 0, 1, -0.072846256, 0, -0.001)
+node_a = NodePath("..")
+node_b = NodePath("../Eslabon1")
+params/bias = 0.1
+params/damping = 0.3
+params/impulse_clamp = 1.0
+
+[node name="Eslabon2" type="RigidBody3D" parent="." unique_id=922020279]
+transform = Transform3D(-0.0040490944, 0.9999916, 0, -0.9999916, -0.0040490944, 0, 0, 0, 1, -0.112363204, -0.00025224686, -0.0010823235)
+collision_layer = 0
+collision_mask = 0
+mass = 0.02
+gravity_scale = 5.0
+can_sleep = false
+linear_damp = 0.5
+angular_damp = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Eslabon2" unique_id=1214404065]
+mesh = SubResource("CylinderMesh_sh5ts")
+
+[node name="PinJoint3D2" type="PinJoint3D" parent="." unique_id=38186367]
+transform = Transform3D(-0.0040490944, 0.9999916, 0, -0.9999916, -0.0040490944, 0, 0, 0, 1, -0.112846255, 0, -0.001)
+node_a = NodePath("../Eslabon1")
+node_b = NodePath("../Eslabon2")
+params/bias = 0.1
+params/damping = 0.3
+params/impulse_clamp = 1.0
+
+[node name="Eslabon3" type="RigidBody3D" parent="." unique_id=1280879719]
+transform = Transform3D(-0.0040490944, 0.9999916, 0, -0.9999916, -0.0040490944, 0, 0, 0, 1, -0.15146641, -9.392202e-05, -0.0010823235)
+collision_layer = 0
+collision_mask = 0
+mass = 0.02
+gravity_scale = 5.0
+can_sleep = false
+linear_damp = 0.5
+angular_damp = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Eslabon3" unique_id=1207385219]
+mesh = SubResource("CylinderMesh_sh5ts")
+
+[node name="PinJoint3D3" type="PinJoint3D" parent="." unique_id=1824960598]
+transform = Transform3D(-0.0040490944, 0.9999916, 0, -0.9999916, -0.0040490944, 0, 0, 0, 1, -0.15184626, 0, -0.001)
+node_a = NodePath("../Eslabon2")
+node_b = NodePath("../Eslabon3")
+params/bias = 0.1
+params/damping = 0.3
+params/impulse_clamp = 1.0
