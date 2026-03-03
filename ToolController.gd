@@ -10,7 +10,7 @@ extends Node3D
 @export_group("Parámetros de Control")
 @export var raycast_length: float = 15.0
 @export var mouse_sensitivity: float = 0.002
-@export var interpolation_speed: float = 40.0 # Aumentado para mayor firmeza
+@export var interpolation_speed: float = 40.0 
 
 # --- Configuración de Brazo ---
 @export_enum("Izquierdo", "Derecho") var lado_control: int = 0 
@@ -19,6 +19,7 @@ extends Node3D
 var is_grasping: bool = false
 var grabbed_object: RigidBody3D = null
 var ik_node: SkeletonIK3D = null
+var original_collision_mask: int = 0 # Para recordar qué chocaba antes de agarrar
 
 func _ready():
 	await get_tree().process_frame
@@ -74,7 +75,7 @@ func _start_grasp():
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsShapeQueryParameters3D.new()
 	var sphere = SphereShape3D.new()
-	sphere.radius = 0.15 # Radio un poco más amplio para facilitar el agarre
+	sphere.radius = 0.05 # Radio ajustado para aguja curva
 	
 	query.shape = sphere
 	query.transform = grab_point.global_transform
@@ -83,9 +84,25 @@ func _start_grasp():
 	for res in results:
 		if res.collider is RigidBody3D:
 			grabbed_object = res.collider
+			
+			# Guardamos las colisiones originales antes de apagarlas
+			original_collision_mask = grabbed_object.collision_mask
+			
+			# CONGELAR FÍSICA
 			grabbed_object.freeze = true
-			# CAMBIO CLAVE: Modo STATIC para que el hilo no mueva la aguja mientras la sujetas
+			grabbed_object.global_transform.origin = grab_point.global_position
 			grabbed_object.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+			
+			# APAGAR COLISIONES: Evita que la aguja "patee" a la pinza al agarrarla
+			grabbed_object.collision_mask = 0
+			
+			 # --- DEPURAR POSICION AGUJA ---
+			print("--- REPORTE DE AGARRE ---")
+			print("Pinza (grab_point) en: ", grab_point.global_position)
+			print("Aguja (grabbed_object) en: ", grabbed_object.global_position)
+			print("Cámara en: ", camera.global_position)
+			# -------------------------------
+			
 			print(name, " agarró con éxito: ", grabbed_object.name)
 			break
 
@@ -93,6 +110,8 @@ func _end_grasp():
 	is_grasping = false
 	if grabbed_object:
 		grabbed_object.freeze = false
+		# RESTAURAR COLISIONES: Para que vuelva a chocar con el Pad/Mesa al caer
+		grabbed_object.collision_mask = original_collision_mask
 		print(name, " soltó el objeto.")
 		grabbed_object = null
 
@@ -102,6 +121,6 @@ func _physics_process(delta):
 		ik_target.global_transform.basis = Basis(target_rotation)
 
 	if grabbed_object and grab_point:
-		# Interpolación más rápida para compensar el peso del hilo
+		# Interpolación suave y rápida hacia la pinza
 		grabbed_object.global_transform.origin = grabbed_object.global_transform.origin.lerp(grab_point.global_transform.origin, interpolation_speed * delta)
 		grabbed_object.global_basis = grabbed_object.global_basis.slerp(grab_point.global_basis, interpolation_speed * delta)
