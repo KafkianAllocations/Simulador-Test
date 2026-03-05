@@ -3,6 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://8v5sjhcylint" path="res://GripTOolRig2.glb" id="1_5mt6y"]
 [ext_resource type="Script" uid="uid://irsbfwnj6ee8" path="res://ToolController.gd" id="2_k78fj"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5mt6y"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_k78fj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ggr4k"]
+height = 35.052124
+
 [node name="GripTOolRig2" unique_id=355066744 node_paths=PackedStringArray("skeleton", "grab_point") instance=ExtResource("1_5mt6y")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 script = ExtResource("2_k78fj")
@@ -10,6 +17,30 @@ skeleton = NodePath("Armature/Skeleton3D")
 grab_point = NodePath("Armature/Skeleton3D/Bone_002/GrabPoint")
 
 [node name="GrabPoint" type="Marker3D" parent="Armature/Skeleton3D/Bone_002" parent_id_path=PackedInt32Array(983025874) index="1" unique_id=938383470]
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="Armature/Skeleton3D/Bone_002" parent_id_path=PackedInt32Array(983025874) index="2" unique_id=2098938831]
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Armature/Skeleton3D/Bone_002/AnimatableBody3D" index="0" unique_id=1170827210]
+transform = Transform3D(0.0029822253, 0.00032608712, -5.913628e-07, -0.0003260859, 0.002982186, -1.5290174e-05, -1.0741251e-06, 1.5263855e-05, 0.0029999614, 0.00012811733, -0.0006592572, 5.5144774e-06)
+shape = SubResource("CapsuleShape3D_5mt6y")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="Armature/Skeleton3D/Bone_003" parent_id_path=PackedInt32Array(208410006) index="1" unique_id=1781460237]
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Armature/Skeleton3D/Bone_003/AnimatableBody3D" index="0" unique_id=1204253896]
+transform = Transform3D(0.0029811857, -0.00033545826, 4.0618227e-07, 0.00033545843, 0.0029811808, -5.234178e-06, 1.8164035e-07, 5.2467717e-06, 0.0029999954, -0.00012816672, -0.0004130602, 2.1404267e-06)
+shape = SubResource("CapsuleShape3D_k78fj")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="Armature/Skeleton3D/Bone" parent_id_path=PackedInt32Array(1942698503) index="1" unique_id=1957889828]
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Armature/Skeleton3D/Bone/AnimatableBody3D" index="0" unique_id=512907857]
+transform = Transform3D(0.008, 0, 3.6443433e-24, 0, 0.008, 0, -3.6443433e-24, 0, 0.008, -6.352747e-22, 0.28917053, 2.6645353e-15)
+shape = SubResource("CapsuleShape3D_ggr4k")
 
 [node name="SkeletonIK3D" type="SkeletonIK3D" parent="Armature/Skeleton3D" parent_id_path=PackedInt32Array(1277113860) index="4" unique_id=1987525999]
 root_bone = &"Bone"

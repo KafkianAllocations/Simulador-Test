@@ -94,7 +94,7 @@ func _start_grasp():
 			grabbed_object.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
 			
 			# APAGAR COLISIONES: Evita que la aguja "patee" a la pinza al agarrarla
-			grabbed_object.collision_mask = 0
+			grabbed_object.set_collision_mask_value(1, true)
 			
 			 # --- DEPURAR POSICION AGUJA ---
 			print("--- REPORTE DE AGARRE ---")
@@ -116,11 +116,28 @@ func _end_grasp():
 		grabbed_object = null
 
 func _physics_process(delta):
+	# 1. Mantener la rotación de la pinza con la cámara
 	if ik_target and camera:
 		var target_rotation = camera.global_transform.basis.get_rotation_quaternion()
 		ik_target.global_transform.basis = Basis(target_rotation)
+		
+		# --- EL FRENO QUIRÚRGICO ---
+		# Sustituye '0.12' por la altura real (Y) de tu mesa en este nivel
+		var limite_suelo = 1.042 
+		if ik_target.global_position.y < limite_suelo:
+			ik_target.global_position.y = limite_suelo
 
+	# 2. AGARRE: Mantiene la aguja firme en la pinza
 	if grabbed_object and grab_point:
-		# Interpolación suave y rápida hacia la pinza
-		grabbed_object.global_transform.origin = grabbed_object.global_transform.origin.lerp(grab_point.global_transform.origin, interpolation_speed * delta)
-		grabbed_object.global_basis = grabbed_object.global_basis.slerp(grab_point.global_basis, interpolation_speed * delta)
+		# Usamos una interpolación muy fuerte para que el hilo no "jale" la aguja lejos
+		var fuerza_seguimiento = interpolation_speed * 1.5
+		
+		grabbed_object.global_transform.origin = grabbed_object.global_transform.origin.lerp(
+			grab_point.global_transform.origin, 
+			fuerza_seguimiento * delta
+		)
+		
+		grabbed_object.global_basis = grabbed_object.global_basis.slerp(
+			grab_point.global_basis, 
+			fuerza_seguimiento * delta
+		)
